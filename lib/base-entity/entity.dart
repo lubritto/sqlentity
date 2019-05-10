@@ -5,6 +5,7 @@ import 'package:sqlentity/database/database-config.dart';
 abstract class Entity {
 
   String table;
+  String guid;
   List<Column<String, String, Object>> column;
   List<Column<String, String, int>> _columnalter;
   List<Column<String, String, int>> _columndelete;
@@ -12,7 +13,7 @@ abstract class Entity {
   DataBaseConfig _dataBaseConfig;
 
   ///set table
-  Entity(this.table) {
+  Entity(this.table, this.guid) {
     _dataBaseConfig = DataBaseConfig.getInstance();
     column = new List();
     _columnalter = new List();
