@@ -7,18 +7,18 @@ abstract class Entity {
   String table;
   String guid;
   List<Column<String, String, Object>> column;
-  List<Column<String, String, int>> _columnalter;
-  List<Column<String, String, int>> _columndelete;
-  List<Column<String, String, int>> _columncreate;
+  List<Column<String, String, int>> columnalter;
+  List<Column<String, String, int>> columndelete;
+  List<Column<String, String, int>> columncreate;
   DataBaseConfig _dataBaseConfig;
 
   ///set table
   Entity(this.table, this.guid) {
-    _dataBaseConfig = DataBaseConfig.getInstance();
+    _dataBaseConfig = DataBaseConfig();
     column = new List();
-    _columnalter = new List();
-    _columndelete = new List();
-    _columncreate = new List();
+    columnalter = new List();
+    columndelete = new List();
+    columncreate = new List();
     configColumn();
   }
 
@@ -27,19 +27,19 @@ abstract class Entity {
 
   ///create columns
   void createColumn(var name, var type, var versao) {
-    _columncreate.add(new Column(column: name, type: type, value: versao));
+    columncreate.add(new Column(column: name, type: type, value: versao));
     column.add(new Column(column: name, type: type));
   }
 
   ///alter columns
   void alterColumn(var name, var type, var versao) {
-    _columnalter.add(new Column(column: name, type: type, value: versao));
+    columnalter.add(new Column(column: name, type: type, value: versao));
     _updateFinal(name, type, versao);
   }
 
   ///delete columns
   void deleteColumn(var name, var versao) {
-    _columndelete.add(new Column(column: name, value: versao));
+    columndelete.add(new Column(column: name, value: versao));
     _deleteFinal(name, versao);
   }
 
@@ -55,7 +55,7 @@ abstract class Entity {
 
   ///update columns
   void _updateFinal(var name, var type, var versao) {
-    _columncreate.forEach((column) {
+    columncreate.forEach((column) {
       if (column.column == name && _dataBaseConfig.database_version <= versao) {
         column.value = versao;
         column.type = type;
@@ -66,9 +66,9 @@ abstract class Entity {
 
   ///delete columns
   void _deleteFinal(var name, int versao) {
-    for (int i = 0; i < _columncreate.length; i++)
-      if (_columncreate[i].column == name && _dataBaseConfig.database_version <= versao)
-        _columncreate.removeAt(i);
+    for (int i = 0; i < columncreate.length; i++)
+      if (columncreate[i].column == name && _dataBaseConfig.database_version <= versao)
+        columncreate.removeAt(i);
   }
 
   ///values columns
@@ -82,8 +82,4 @@ abstract class Entity {
 
   ///map column
   Entity map(Map<String, dynamic> map);
-
-  List<Column<String, String, int>> get columncreate => _columncreate;
-  List<Column<String, String, int>> get columndelete => _columndelete;
-  List<Column<String, String, int>> get columnalter => _columnalter;
 }

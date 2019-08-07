@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:sqlentity/base-entity/entity.dart';
 
 ///Standard contract of repository
-abstract class IDAORepository<T extends Entity>{
+abstract class IDAO<T extends Entity>{
 
   ///insert data table
   Future<int> insert(T entity);
